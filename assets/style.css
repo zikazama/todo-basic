@@ -1,0 +1,28 @@
+#list-todo {
+  text-align: center;
+  background-color: lightblue;
+  /* Cara bikin layout ketengah */
+  width: 300px;
+  margin: auto;
+  padding: 10px;
+}
+.list-item {
+  margin: 10px;
+  background-color: yellow;
+}
+#form-todo {
+  background-color: lime;
+  width: 300px;
+  margin: auto;
+  padding: 10px;
+  text-align: center;
+  padding-bottom: 30px;
+}
+.btn-edit {
+  background-color: orange;
+  margin: 5px
+}
+.btn-delete {
+  background-color: red;
+  margin: 5px
+}

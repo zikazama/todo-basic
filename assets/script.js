@@ -1,4 +1,6 @@
 const listElement = document.getElementById("list");
+const button = document.getElementById('btn-add');
+button.addEventListener('click', createDataLocalStorage);
 
 async function loadAndDisplayDataFromJson() {
   const response = await fetch("./assets/data.json"); // Replace with your JSON file path or URL
@@ -51,6 +53,7 @@ async function loadAndDisplayDataFromLocalStorage() {
 function editMode(event) {
   const button = document.getElementById('btn-add');
   button.textContent = 'Update';
+  button.removeEventListener('click', createDataLocalStorage);
   const currentId = parseInt(event.currentTarget.dataId);
   const response = localStorage.getItem('data') // Replace with your JSON file path or URL
   const data = JSON.parse(response);
@@ -58,7 +61,6 @@ function editMode(event) {
   const getInputTodo = document.getElementById('input-todo');
   getInputTodo.value = currentData.todo;
   localStorage.setItem('currentId', currentId);
-  localStorage.setItem('currentInput', currentData.todo);
   button.addEventListener('click', editAction)
 }
 
@@ -68,13 +70,16 @@ function editAction() {
   const currentId = parseInt(localStorage.getItem('currentId'));
   const getInputTodo = document.getElementById('input-todo');
   const newData = data;
-  newData[currentId].todo = localStorage.getItem('currentInput');
+  newData[currentId].todo = getInputTodo.value;
   dataToLocal = JSON.stringify(newData);
   localStorage.setItem('data', dataToLocal);
   const button = document.getElementById('btn-add');
   getInputTodo.value = '';
   button.textContent = 'Tambah';
+  button.removeEventListener('click', editAction);
   button.addEventListener('click', createDataLocalStorage);
+  listElement.innerHTML = '';
+  loadAndDisplayDataFromLocalStorage();
 }
 
 function deleteTodo(event) {
@@ -119,8 +124,13 @@ async function createDataLocalStorage() {
     "todo": getInputTodo.value,
   };
   const response = localStorage.getItem('data') // Replace with your JSON file path or URL
-  const data = JSON.parse(response);
-  data.push(dataObject);
+  let data = JSON.parse(response);
+  if (data) {
+    data.push(dataObject);
+  } else {
+    data = [];
+    data.push(dataObject);
+  }
   dataToLocal = JSON.stringify(data);
   localStorage.setItem('data', dataToLocal);
   listElement.innerHTML = '';
